@@ -3,7 +3,7 @@
 #define TAM 50
 
 struct No{
-    int dado;
+    char dado;
     int bal;
     struct No *esquerda;
     struct No *direita;
@@ -11,18 +11,21 @@ struct No{
 };
 
 struct No *raiz = NULL;
-void pre_ordem(struct No *ptr);
 
+void menu(); //pronto
+void pos_ordem(struct No *ptr); //pronto
+void pre_ordem(struct No *ptr); //pronto
+void ordem(struct No *ptr); //pronto
+struct No* buscaArvore(struct No *ptr, char palavra); //pronto
+struct No* minimo(struct No *ptr); //pronto
+struct No* maximo(struct No *ptr); //pronto
+struct No* sucessor(struct No *ptr); //pronto
+struct No* predecessor(struct No *ptr); //pronto
 
-void menu();
-void inserir();
-struct No* Aloca(int n);
-void pos_ordem(struct No *ptr);
-void ordem(struct No *ptr);
-struct No* buscar(struct No *ptr, int n);
-struct No* minimo(struct No *ptr);
-struct No* maximo(struct No *ptr);
-struct No* sucessor(struct No *ptr);
+void inserir(); 
+void remover();
+struct No* rotaciona_direita(struct No*);
+struct No* rotaciona_esquerda(struct No*);
 
 
 int main(){
@@ -80,18 +83,26 @@ void menu(){
 }
 
 void inserir(){
+    struct No *num = NULL;
+    struct No *num2 = NULL;
 
+    char palavra[TAM];
+
+    printf("Digite a palavra a ser inserida:\n");
+    scanf("\n%s", palavra);
+
+    if(raiz == NULL){
+
+    }
 }
 
-struct No* Aloca(int n){
-    struct No *elemento;
-
-    elemento->dado = n;
-    elemento->pai = NULL;
-    elemento->esquerda = NULL;
-    elemento->direita = NULL;
-
-    return elemento;
+struct No* buscaArvore(struct No *ptr, char palavra){
+    if(ptr == NULL || palavra == ptr->dado)
+        return ptr;
+    if(palavra < ptr->dado)
+        return buscaArvore(ptr->esquerda, palavra);
+    else
+        return buscaArvore(ptr->direita, palavra);
 }
 
 void pre_ordem(struct No *ptr){
@@ -116,15 +127,6 @@ void ordem(struct No *ptr){
         printf("%d", ptr->dado);
         ordem(ptr->direita);
     }
-}
-
-struct No* buscar(struct No *ptr, int n){
-    if(ptr == NULL || n == ptr->dado)
-        return ptr;
-    if(n < ptr->dado)
-        return buscar(ptr->esquerda, n);
-    else
-        return buscar(ptr->direita, n);
 }
 
 struct No* minimo(struct No *ptr){
@@ -154,6 +156,22 @@ struct No* sucessor(struct No *ptr){
     aux = ptr->pai;
 
     while (aux != NULL && ptr == aux->direita){
+        ptr = aux;
+        aux = aux->pai;
+    }
+
+    return aux;
+}
+
+struct No* predecessor(struct No *ptr){
+    struct No *aux;
+
+    if(ptr->esquerda != NULL)
+        return maximo(ptr->esquerda);
+
+    aux = ptr->pai;
+
+    while (aux != NULL && ptr == aux->esquerda){
         ptr = aux;
         aux = aux->pai;
     }
